@@ -261,7 +261,8 @@
 
         .challan-bar-title {
             position: relative;
-            background: var(--challan-navy) !important;
+            background: #ffffff !important;
+            border-bottom: 1.5px solid var(--challan-navy);
             text-align: center;
             font-weight: 800;
             font-size: 19px;
@@ -270,7 +271,7 @@
             padding: 14px 0;
             overflow: hidden;
         }
-        .challan-bar-title, .challan-bar-title * { color: #ffffff !important; }
+        .challan-bar-title, .challan-bar-title * { color: #000000 !important; }
 
         .challan-top-header { text-align: center; padding: 14px 20px 10px; background: #fff; }
         .challan-top-header h2 { margin: 0 0 12px; font-size: 27px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--challan-navy) !important; }
@@ -306,8 +307,8 @@
         }
         .challan-goods-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
         .challan-goods-table th, .challan-goods-table td { border: 1px solid var(--challan-navy); padding: 8px 8px; text-align: center; vertical-align: middle; }
-        .challan-goods-table th { background-color: var(--challan-navy) !important; font-weight: bold; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.3px; }
-        .challan-goods-table th, .challan-goods-table th * { color: #ffffff !important; }
+        .challan-goods-table th { background-color: #ffffff !important; font-weight: bold; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.3px; }
+        .challan-goods-table th, .challan-goods-table th * { color: #000000 !important; }
         .challan-goods-table td:nth-child(2), .challan-goods-table th:nth-child(2) { text-align: left; }
 
         .challan-dispatch-type-bar {
@@ -380,16 +381,16 @@
 
         .challan-contact-footer {
             display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;
-            background: var(--challan-navy) !important; padding: 10px 15px; font-size: 12px; gap: 10px;
+            background: #ffffff !important; border-top: 1.5px solid var(--challan-navy); padding: 10px 15px; font-size: 12px; gap: 10px;
         }
-        .challan-contact-footer, .challan-contact-footer * { color: #ffffff !important; }
+        .challan-contact-footer, .challan-contact-footer * { color: #000000 !important; }
         .challan-contact-footer i { margin-right: 6px; }
         
         .challan-thankyou-bar {
-            background: #0a1730 !important; text-align: center; padding: 6px 0;
+            background: #ffffff !important; border-top: 1.5px solid var(--challan-navy); text-align: center; padding: 6px 0;
             font-size: 12px; font-weight: 700; letter-spacing: 1px;
         }
-        .challan-thankyou-bar, .challan-thankyou-bar * { color: #ffffff !important; }
+        .challan-thankyou-bar, .challan-thankyou-bar * { color: #000000 !important; }
 
         .erp-footer {
             margin-top: auto;
@@ -431,8 +432,8 @@
             }
 
             .challan-bar-title, .challan-goods-table th, .challan-contact-footer, .challan-thankyou-bar {
-                background: #0f1e3d !important;
-                color: #ffffff !important;
+                background: #ffffff !important;
+                color: #000000 !important;
             }
 
             .challan-print-box {
@@ -753,6 +754,23 @@
                                 <div class="d-inline-block text-center px-4 py-2 border border-secondary rounded bg-white shadow-sm" style="min-width: 250px;">
                                     <span class="fw-bold text-dark d-block mb-4 pb-2">For Sanchar Telesystems Limited</span>
                                     <span class="border-top border-dark px-3 pt-1 small text-muted">Sign. / Authorised Signatory</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border rounded-3 p-3 mt-3 bg-light bg-opacity-50" style="max-width: 420px;">
+                            <h6 class="fw-bold small text-uppercase tracking-wider mb-3" style="color: var(--text-color);"><i class="fa-solid fa-truck-fast text-secondary me-1"></i> Courier Details (if received by courier)</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="formCourierName" placeholder="Courier Name">
+                                        <label for="formCourierName">Courier Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="formLrDocketNo" placeholder="LR/Docket No.">
+                                        <label for="formLrDocketNo">LR/Docket No.</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1577,6 +1595,8 @@
                 items: itemsArray,
                 totalUnitsCount: calculatedTotalQty,
                 receivedBy: document.getElementById('formReceivedBy').value || 'Inward Receipt',
+                courierName: document.getElementById('formCourierName').value || 'NA',
+                lrDocketNo: document.getElementById('formLrDocketNo').value || 'NA',
                 timestamp: new Date().toISOString(),
                 status: 'draft'
             };
@@ -2284,6 +2304,13 @@
                                 <div class="challan-box-body">
                                     <div>Name<span class="meta-colon">:</span> <span class="field-line" style="min-width:180px;">${targetData.receivedBy || ''}</span></div>
                                     <div class="mt-1">Date<span class="meta-colon">:</span> <span class="field-line" style="min-width:180px;"></span></div>
+                                </div>
+                            </div>
+                            <div class="challan-bottom-left" style="flex: 0.8;">
+                                <div class="challan-box-title"><i class="fa-solid fa-truck-fast"></i>Courier Details</div>
+                                <div class="challan-box-body">
+                                    <div>Courier Name<span class="meta-colon">:</span> <span class="field-line" style="min-width:110px;">${(targetData.courierName && targetData.courierName !== 'NA') ? targetData.courierName : ''}</span></div>
+                                    <div class="mt-1">LR/Docket No.<span class="meta-colon">:</span> <span class="field-line" style="min-width:110px;">${(targetData.lrDocketNo && targetData.lrDocketNo !== 'NA') ? targetData.lrDocketNo : ''}</span></div>
                                 </div>
                             </div>
                             <div class="challan-signatory-box" style="flex: 1; margin:0;">

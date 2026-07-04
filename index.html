@@ -7,7 +7,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -243,7 +243,7 @@
             font-family: Arial, sans-serif;
             width: 100%;
             max-width: 195mm;
-            height: auto;
+            min-height: 277mm; /* Added to keep design unified down the vertical baseline */
             box-sizing: border-box;
             margin: 0 auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.08);
@@ -251,12 +251,14 @@
             padding: 0;
             overflow: hidden;
             page-break-inside: avoid;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .challan-print-box * { color: #1a1a1a; }
         .challan-print-box + .challan-print-box { margin-top: 30px; }
         .challan-print-box:not(:last-child) { page-break-after: always; break-after: page; }
 
-        /* Modified: Simplified Header Bar Style */
         .challan-bar-title {
             position: relative;
             background: var(--challan-navy) !important;
@@ -269,16 +271,12 @@
             overflow: hidden;
         }
         .challan-bar-title, .challan-bar-title * { color: #ffffff !important; }
-        .challan-bar-title::before, .challan-bar-title::after {
-            display: none !important; /* Strips patterns hidden */
-        }
 
         .challan-top-header { text-align: center; padding: 14px 20px 10px; background: #fff; }
         .challan-top-header h2 { margin: 0 0 12px; font-size: 27px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--challan-navy) !important; }
         .challan-top-header p { margin: 5px 0; font-size: 13px; color: #333 !important; }
         .challan-top-header p i { color: var(--challan-navy) !important; margin-right: 6px; }
         .challan-top-header .gst-line { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
-        .challan-top-header .gst-line .sep { color: #999 !important; }
 
         .challan-split-meta { display: flex; gap: 12px; width: 100%; padding: 0 12px 10px; box-sizing: border-box; }
         .challan-meta-left, .challan-meta-right {
@@ -302,16 +300,20 @@
         .challan-meta-left .meta-label, .challan-meta-right .meta-label { font-weight: 700; display: inline-block; min-width: 105px; }
         .challan-meta-left .meta-colon, .challan-meta-right .meta-colon { display: inline-block; width: 12px; }
 
+        .challan-table-container {
+            flex-grow: 1; /* Automatically stretches column layout spacing smoothly down to footer context */
+            padding: 0 12px;
+        }
         .challan-goods-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
-        .challan-goods-table th, .challan-goods-table td { border: 1px solid var(--challan-navy); padding: 5px 8px; text-align: center; vertical-align: middle; }
+        .challan-goods-table th, .challan-goods-table td { border: 1px solid var(--challan-navy); padding: 8px 8px; text-align: center; vertical-align: middle; }
         .challan-goods-table th { background-color: var(--challan-navy) !important; font-weight: bold; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.3px; }
         .challan-goods-table th, .challan-goods-table th * { color: #ffffff !important; }
         .challan-goods-table td:nth-child(2), .challan-goods-table th:nth-child(2) { text-align: left; }
-        .challan-goods-table tbody tr td { height: 22px; padding: 5px 8px; }
 
         .challan-dispatch-type-bar {
             border-top: 1px solid var(--challan-navy); border-bottom: 1px solid var(--challan-navy);
             padding: 8px 16px; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;
+            margin: 10px 12px;
         }
 
         .challan-bottom-grid { display: flex; gap: 12px; width: 100%; padding: 8px 12px; box-sizing: border-box; }
@@ -336,12 +338,10 @@
         }
         .challan-box-title i { margin-right: 6px; color: var(--challan-navy) !important; }
         .challan-box-body { padding: 6px 10px; font-size: 12px; line-height: 1.5; flex-grow: 1; }
-        .challan-box-body.sign-body { display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
         .challan-box-body .field-line { border-bottom: 1px solid #888; display: inline-block; min-width: 140px; margin-left: 6px; }
-        .challan-sign-authority-text { text-align: center; font-weight: 800; margin-top: auto; padding-top: 10px; }
 
         .challan-footer-declaration { display: flex; gap: 12px; width: 100%; padding: 0 12px 8px; box-sizing: border-box; font-size: 12px; }
-        .challan-footer-declaration .challan-bottom-left, .challan-footer-declaration .challan-bottom-right { min-height: 50px; }
+        .challan-footer-declaration .challan-bottom-left { min-height: 50px; }
 
         .challan-dispatch-box {
             border: 1.5px solid var(--challan-navy);
@@ -352,7 +352,6 @@
         }
         .challan-dispatch-box .dispatch-box-body { padding: 10px 14px; }
         .dispatch-row { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 6px; }
-        .dispatch-row:last-child { margin-bottom: 0; }
         .dispatch-field { display: flex; align-items: baseline; gap: 6px; flex: 1 1 45%; min-width: 220px; }
         .dispatch-field.full-width { flex: 1 1 100%; }
         .dispatch-field .dispatch-label { font-weight: 800; white-space: nowrap; }
@@ -385,6 +384,7 @@
         }
         .challan-contact-footer, .challan-contact-footer * { color: #ffffff !important; }
         .challan-contact-footer i { margin-right: 6px; }
+        
         .challan-thankyou-bar {
             background: #0a1730 !important; text-align: center; padding: 6px 0;
             font-size: 12px; font-weight: 700; letter-spacing: 1px;
@@ -443,14 +443,7 @@
                 page-break-after: auto;
             }
 
-            .challan-goods-table, .challan-goods-table th, .challan-goods-table td {
-                border: 0.75px solid #0f1e3d !important;
-                padding: 4px !important;
-            }
-
-            h1, h2, h3, h4, strong { font-weight: 700 !important; }
-            
-            @page { size: A4 portrait; margin: 10mm; }
+            @page { size: A4 portrait; margin: 0; }
         }
     </style>
 </head>
@@ -714,10 +707,9 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="itemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 40%;">Product Description *</th>
-                                            <th style="width: 25%;">Serial Number *</th>
+                                            <th style="width: 50%;">Product Description *</th>
+                                            <th style="width: 30%;">Serial Number *</th>
                                             <th style="width: 15%;">Qty *</th>
-                                            <th style="width: 15%;">Issue Faced *</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -726,7 +718,6 @@
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                                            <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                                         </tr>
                                     </tbody>
@@ -824,10 +815,9 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="outwardItemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 35%;">Product Description *</th>
-                                            <th style="width: 25%;">Serial Number *</th>
-                                            <th style="width: 15%;">Qty *</th>
-                                            <th style="width: 20%;">Remarks *</th>
+                                            <th style="width: 45%;">Product Description *</th>
+                                            <th style="width: 30%;">Serial Number *</th>
+                                            <th style="width: 20%;">Qty *</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -836,7 +826,6 @@
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                                            <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                                         </tr>
                                     </tbody>
@@ -976,7 +965,7 @@
                                     <th>Log Date</th>
                                     <th>Customer Name</th>
                                     <th>Product Description</th>
-                                    <th>Issue / Status Meta</th>
+                                    <th>Status Meta</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -1135,11 +1124,10 @@
                             <table class="table table-bordered table-hover align-middle bg-white mb-0">
                                 <thead class="table-light">
                                     <tr class="small text-uppercase">
-                                        <th style="width: 38%;">Product Description *</th>
-                                        <th style="width: 22%;">Serial Number *</th>
-                                        <th style="width: 12%;">Qty *</th>
-                                        <th style="width: 22%;">Issue Faced / Remarks</th>
-                                        <th style="width: 6%; text-align:center;">Drop</th>
+                                        <th style="width: 50%;">Product Description *</th>
+                                        <th style="width: 30%;">Serial Number *</th>
+                                        <th style="width: 15%;">Qty *</th>
+                                        <th style="width: 5%; text-align:center;">Drop</th>
                                     </tr>
                                 </thead>
                                 <tbody id="draftEditItemTableBody"></tbody>
@@ -1422,7 +1410,6 @@
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1435,7 +1422,6 @@
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1548,7 +1534,7 @@
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
                     quantity: itemQty.toFixed(2),
-                    issueFaced: row.querySelector('.row-faced').value
+                    issueFaced: "NA"
                 });
             });
 
@@ -1580,7 +1566,6 @@
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                            <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                         </tr>
                     `;
@@ -1626,7 +1611,7 @@
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
                     quantity: itemQty.toFixed(2),
-                    issueFaced: row.querySelector('.row-faced').value
+                    issueFaced: "NA"
                 });
             });
             const matType = document.getElementById('outwardFormMaterialType').value;
@@ -1658,7 +1643,6 @@
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
-                            <td><input type="text" class="form-control form-control-sm row-faced" required value="NA"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                         </tr>
                     `;
@@ -1916,7 +1900,6 @@
                 <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm de-row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="1"></td>
-                <td><input type="text" class="form-control form-control-sm de-row-faced" value="NA"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1954,7 +1937,6 @@
                     <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions" value="${prod.description || ''}"></td>
                     <td><input type="text" class="form-control form-control-sm de-row-serial" required value="${prod.serialNo || ''}"></td>
                     <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="${parseFloat(prod.quantity) || 1}"></td>
-                    <td><input type="text" class="form-control form-control-sm de-row-faced" value="${prod.issueFaced || 'NA'}"></td>
                     <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                 `;
                 itemsBody.appendChild(row);
@@ -1986,7 +1968,7 @@
                     description: row.querySelector('.de-row-desc').value,
                     serialNo: row.querySelector('.de-row-serial').value,
                     quantity: itemQty.toFixed(2),
-                    issueFaced: row.querySelector('.de-row-faced').value || 'NA'
+                    issueFaced: "NA"
                 });
             });
 
@@ -2126,57 +2108,35 @@
                 renderMasterTableRows();
             }
             if(document.getElementById('draftChallanModule').style.display === 'block') {
-                renderDraftTextRows();
+                renderDraftTableRows();
             }
         });
 
         const MAX_ITEMS_PER_CHALLAN_PAGE = 20;
 
-        function buildGoodsRowsHtml(pageItems, startIndex, isDelivery) {
+        function buildGoodsRowsHtml(pageItems, startIndex) {
             return pageItems.map((item, idx) => {
                 const sno = startIndex + idx + 1;
-                if (isDelivery) {
-                    return `
-                        <tr>
-                            <td>${sno}</td>
-                            <td>${item.description || ''}</td>
-                            <td>${item.serialNo || ''}</td>
-                            <td>${parseFloat(item.quantity || 0)}</td>
-                            <td>${item.issueFaced || 'NA'}</td>
-                        </tr>`;
-                }
                 return `
-                        <tr>
-                            <td>${sno}</td>
-                            <td>${item.description || ''}</td>
-                            <td>${item.serialNo || ''}</td>
-                            <td>${parseFloat(item.quantity || 0)}</td>
-                            <td>${item.issueFaced || ''}</td>
-                            <td>NA</td>
-                        </tr>`;
+                    <tr>
+                        <td>${sno}</td>
+                        <td>${item.description || ''}</td>
+                        <td>${item.serialNo || ''}</td>
+                        <td>${parseFloat(item.quantity || 0)}</td>
+                        <td>NA</td>
+                    </tr>`;
             }).join('');
         }
 
-        function buildGoodsTableHeadHtml(isDelivery) {
-            if (isDelivery) {
-                return `
-                    <tr>
-                        <th style="width: 8%;">S.No.</th>
-                        <th style="width: 40%;">Product Description</th>
-                        <th style="width: 24%;">Serial No.</th>
-                        <th style="width: 13%;">Quantity</th>
-                        <th style="width: 15%;">Remarks</th>
-                    </tr>`;
-            }
+        function buildGoodsTableHeadHtml() {
             return `
-                    <tr>
-                        <th style="width: 7%;">S.No.</th>
-                        <th style="width: 33%;">Product Description</th>
-                        <th style="width: 20%;">Serial No.</th>
-                        <th style="width: 10%;">Quantity</th>
-                        <th style="width: 15%;">Issue Faced</th>
-                        <th style="width: 15%;">Remarks</th>
-                    </tr>`;
+                <tr>
+                    <th style="width: 10%;">S.No.</th>
+                    <th style="width: 45%;">Product Description</th>
+                    <th style="width: 25%;">Serial No.</th>
+                    <th style="width: 10%;">Quantity</th>
+                    <th style="width: 10%;">Remarks</th>
+                </tr>`;
         }
 
         function buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, pageNumber, totalPages) {
@@ -2207,56 +2167,58 @@
                     }
 
                     bottomSectionHtml = `
-                        <div class="challan-dispatch-box">
-                            <div class="challan-box-title"><i class="fa-solid fa-truck-fast"></i>Dispatch Details</div>
-                            <div class="dispatch-box-body">
-                                <div class="dispatch-row">
-                                    <div class="dispatch-field">
-                                        <span class="dispatch-label">MODE OF DISPATCH&nbsp;:</span>
-                                        <span class="field-line-long">${modeOfDispatchStr}</span>
+                        <div>
+                            <div class="challan-dispatch-box">
+                                <div class="challan-box-title"><i class="fa-solid fa-truck-fast"></i>Dispatch Details</div>
+                                <div class="dispatch-box-body">
+                                    <div class="dispatch-row">
+                                        <div class="dispatch-field">
+                                            <span class="dispatch-label">MODE OF DISPATCH&nbsp;:</span>
+                                            <span class="field-line-long">${modeOfDispatchStr}</span>
+                                        </div>
+                                        <div class="dispatch-field">
+                                            <span class="dispatch-label">RR / LR / DOCKET NO.&nbsp;:</span>
+                                            <span class="field-line-long"></span>
+                                        </div>
                                     </div>
-                                    <div class="dispatch-field">
-                                        <span class="dispatch-label">RR / LR / DOCKET NO.&nbsp;:</span>
-                                        <span class="field-line-long"></span>
+                                    <div class="dispatch-row">
+                                        <div class="dispatch-field">
+                                            <span class="dispatch-label">FREIGHT&nbsp;:</span>
+                                            <span class="field-line-long"></span>
+                                        </div>
+                                        <div class="dispatch-field">
+                                            <span class="dispatch-label">VEHICLE NO.&nbsp;:</span>
+                                            <span class="field-line-long"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="dispatch-row">
-                                    <div class="dispatch-field">
-                                        <span class="dispatch-label">FREIGHT&nbsp;:</span>
-                                        <span class="field-line-long"></span>
-                                    </div>
-                                    <div class="dispatch-field">
-                                        <span class="dispatch-label">VEHICLE NO.&nbsp;:</span>
-                                        <span class="field-line-long"></span>
-                                    </div>
-                                </div>
-                                <div class="dispatch-row">
-                                    <div class="dispatch-field full-width">
-                                        <span class="dispatch-label">MATERIAL TYPE DISPATCH&nbsp;:</span>
-                                        <div class="dispatch-checkbox-group ms-2">
-                                            <label><input type="checkbox" ${materialTypeStr === 'Material Sent For Repair' ? 'checked' : ''} disabled> SENT FOR REPAIR</label>
-                                            <label><input type="checkbox" ${materialTypeStr === 'Material Returned After Repair' ? 'checked' : ''} disabled> RETURNED AFTER REPAIR</label>
+                                    <div class="dispatch-row">
+                                        <div class="dispatch-field full-width">
+                                            <span class="dispatch-label">MATERIAL TYPE DISPATCH&nbsp;:</span>
+                                            <div class="dispatch-checkbox-group ms-2">
+                                                <label><input type="checkbox" ${materialTypeStr === 'Material Sent For Repair' ? 'checked' : ''} disabled> SENT FOR REPAIR</label>
+                                                <label><input type="checkbox" ${materialTypeStr === 'Material Returned After Repair' ? 'checked' : ''} disabled> RETURNED AFTER REPAIR</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="challan-footer-declaration">
-                            <div class="challan-bottom-left text-start p-2" style="font-size:11px; flex: 1.3;">
-                                <strong>Declaration Clause :</strong><br>
-                                ${targetData.declaration || 'NA'}
-                            </div>
-                            <div class="challan-signatory-box" style="flex: 1;">
-                                <div class="sig-body">
-                                    <div class="sig-line"></div>
-                                    <div class="sig-caption">Receiver's Signature & Stamp</div>
+                            <div class="challan-footer-declaration">
+                                <div class="challan-bottom-left text-start p-2" style="font-size:11px; flex: 1.3;">
+                                    <strong>Declaration Clause :</strong><br>
+                                    ${targetData.declaration || 'NA'}
                                 </div>
-                            </div>
-                            <div class="challan-signatory-box" style="flex: 1;">
-                                <div class="sig-title"><i class="fa-solid fa-building-circle-check"></i>Sanchar Telesystems Ltd</div>
-                                <div class="sig-body">
-                                    <div class="sig-line" style="margin-top:20px;"></div>
-                                    <div class="sig-caption">Authorised Signatory</div>
+                                <div class="challan-signatory-box" style="flex: 1;">
+                                    <div class="sig-body">
+                                        <div class="sig-line"></div>
+                                        <div class="sig-caption">Receiver's Signature & Stamp</div>
+                                    </div>
+                                </div>
+                                <div class="challan-signatory-box" style="flex: 1;">
+                                    <div class="sig-title"><i class="fa-solid fa-building-circle-check"></i>Sanchar Telesystems Ltd</div>
+                                    <div class="sig-body">
+                                        <div class="sig-line" style="margin-top:20px;"></div>
+                                        <div class="sig-caption">Authorised Signatory</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>`;
@@ -2287,76 +2249,81 @@
             }
 
             return `
-                <div class="challan-print-box" style="position:relative;">
-                    <div class="challan-bar-title">${titleText}${pageBadge}</div>
+                <div class="challan-print-box">
+                    <div>
+                        <div class="challan-bar-title">${titleText}${pageBadge}</div>
 
-                    <div class="challan-top-header">
-                        <h2>Sanchar Telesystems Limited</h2>
-                        <p><i class="fa-solid fa-location-dot"></i>A-78, Ground Floor, Okhla Industrial Area, Phase II, New Delhi - 110020</p>
-                        <p class="gst-line">
-                            <span><i class="fa-solid fa-id-card"></i><strong>GSTIN:</strong> 07AAMCS2203M1ZS</span>
-                            <span class="sep">|</span>
-                            <span><i class="fa-solid fa-envelope"></i>info@sanchartelesystems.com</span>
-                        </p>
-                    </div>
-
-                    <div class="challan-split-meta">
-                        <div class="challan-meta-left">
-                            <div class="challan-meta-box-title"><i class="fa-solid fa-user"></i>Challan Issued To</div>
-                            <div class="meta-box-body">
-                                <strong>${targetData.customerName || ''}</strong><br>
-                                <span class="text-muted d-block mt-1" style="line-height:1.4;">${targetData.address || ''}</span>
+                        <div class="challan-top-header">
+                            <h2>Sanchar Telesystems Limited</h2>
+                            <p><i class="fa-solid fa-location-dot"></i> 501, 5th Floor, Skylark Building 60, Nehru Place, New Delhi - 110019</p>
+                            <div class="gst-line small fw-bold mt-2">
+                                <span><i class="fa-solid fa-fingerprint"></i> GSTIN: 07AAMCS4654H1ZA</span>
+                                <span class="sep">|</span>
+                                <span><i class="fa-solid fa-envelope"></i> info@sanchartelesystems.com</span>
                             </div>
                         </div>
-                        <div class="challan-meta-right">
-                            <div class="challan-meta-box-title"><i class="fa-solid fa-circle-info"></i>Logistical Metadata</div>
-                            <div class="meta-box-body">
-                                <div><span class="meta-label">Challan No</span><span class="meta-colon">:</span><strong>${targetData.challanNo || ''}</strong></div>
-                                <div><span class="meta-label">Challan Date</span><span class="meta-colon">:</span>${targetData.receivingDate || ''}</div>
-                                <div><span class="meta-label">Customer GST</span><span class="meta-colon">:</span><code>${targetData.gstNumber || ''}</code></div>
+
+                        <div class="challan-split-meta">
+                            <div class="challan-meta-left">
+                                <div class="challan-meta-box-title"><i class="fa-solid fa-user-tie"></i> Consignee / Customer Details</div>
+                                <div class="meta-box-body">
+                                    <div><span class="meta-label">M/S</span><span class="meta-colon">:</span><strong>${targetData.customerName}</strong></div>
+                                    <div><span class="meta-label">Address</span><span class="meta-colon">:</span>${targetData.address}</div>
+                                    <div class="mt-1"><span class="meta-label">GSTIN / UIN</span><span class="meta-colon">:</span><code>${targetData.gstNumber}</code></div>
+                                </div>
+                            </div>
+                            <div class="challan-meta-right">
+                                <div class="challan-meta-box-title"><i class="fa-solid fa-file-invoice"></i> Transaction Logistics</div>
+                                <div class="meta-box-body">
+                                    <div><span class="meta-label">Challan No.</span><span class="meta-colon">:</span><strong>${targetData.challanNo}</strong></div>
+                                    <div><span class="meta-label">Date & Time</span><span class="meta-colon">:</span>${targetData.receivingDate}</div>
+                                    <div><span class="meta-label">Customer Type</span><span class="meta-colon">:</span>${targetData.customerType || 'Private'}</div>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="challan-table-container">
+                            <table class="challan-goods-table">
+                                <thead>
+                                    ${buildGoodsTableHeadHtml()}
+                                </thead>
+                                <tbody>
+                                    ${buildGoodsRowsHtml(pageItems, startIndex)}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        ${dispatchBarHtml}
                     </div>
 
-                    <div style="padding:0 12px; box-sizing:border-box;">
-                        <table class="challan-goods-table">
-                            <thead>
-                                ${buildGoodsTableHeadHtml(isDelivery)}
-                            </thead>
-                            <tbody>
-                                ${buildGoodsRowsHtml(pageItems, startIndex, isDelivery)}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    ${dispatchBarHtml}
-                    ${bottomSectionHtml}
-
-                    <div class="challan-contact-footer">
-                        <span><i class="fa-solid fa-phone"></i>+91-11-41708899</span>
-                        <span><i class="fa-solid fa-globe"></i>www.sanchartelesystems.com</span>
-                    </div>
-                    <div class="challan-thankyou-bar">
-                        THANK YOU FOR YOUR BUSINESS COOPERATION
+                    <div>
+                        ${bottomSectionHtml}
+                        <div class="challan-contact-footer">
+                            <span><i class="fa-solid fa-phone"></i> +91-11-41617630</span>
+                            <span><i class="fa-solid fa-globe"></i> www.sanchartelesystems.com</span>
+                        </div>
+                        <div class="challan-thankyou-bar">Only Thank You</div>
                     </div>
                 </div>`;
         }
 
-        window.renderChallanDocument = function(recordIdKey) {
-            const targetData = fetchedChallans[recordIdKey];
-            if(!targetData) return;
+        window.renderChallanDocument = function(recordKey) {
+            const targetData = fetchedChallans[recordKey];
+            if(!targetData) {
+                alert("Ledger matching element missing.");
+                return;
+            }
 
             const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STELE/DC/'));
             const items = targetData.items || [];
             
-            let totalPages = Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE);
-            if (totalPages === 0) totalPages = 1;
+            const totalPages = Math.max(1, Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE));
+            let comprehensiveChallanHtml = "";
 
-            let compiledHtml = "";
             for (let i = 0; i < totalPages; i++) {
-                let startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
-                let pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
-                compiledHtml += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
+                const startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
+                const pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
+                comprehensiveChallanHtml += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
             }
 
             document.getElementById('dashboardHudModule').style.display = 'none';
@@ -2366,47 +2333,51 @@
             document.getElementById('challanListModule').style.display = 'none';
             document.getElementById('serialTrackerModule').style.display = 'none';
             document.getElementById('masterToolModule').style.display = 'none';
-
-            const printFrame = document.getElementById('challanPrintContainer');
-            printFrame.innerHTML = compiledHtml;
-
-            document.getElementById('pageTitleContext').innerText = `Document Inspection Gateway (${targetData.challanNo})`;
-            document.getElementById('challanViewSection').style.display = 'block';
+            
+            const viewSection = document.getElementById('challanViewSection');
+            const printContainer = document.getElementById('challanPrintContainer');
+            
+            printContainer.innerHTML = comprehensiveChallanHtml;
+            viewSection.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            window.currentActiveViewingChallanNo = targetData.challanNo;
         }
 
         window.closeChallanView = function() {
-            document.getElementById('challanViewSection').style.display = 'none';
-            switchTab('challan');
+            document.getElementById('challanViewSection').style.display = "none";
+            if(window.currentActiveViewingChallanNo && window.currentActiveViewingChallanNo.includes('STELE/RC/')) {
+                switchTab('challan');
+            } else if(window.currentActiveViewingChallanNo && window.currentActiveViewingChallanNo.includes('STELE/DC/')) {
+                switchTab('challan');
+            } else {
+                switchTab('dashboard');
+            }
         }
 
         window.downloadSingleChallanPDF = function() {
-            const container = document.getElementById('challanPrintContainer');
-            const targetBox = container.querySelector('.challan-print-box');
-            if(!targetBox) return;
-            
-            const txt = targetBox.querySelector('.challan-bar-title').innerText || 'Challan';
-            const cleanName = txt.replace(/\s+/g, '_');
-
+            const element = document.getElementById('challanPrintContainer');
+            const filenameString = (window.currentActiveViewingChallanNo || "Challan").replace(/\//g, '_');
             const opt = {
-                margin:       [5, 5, 5, 5],
-                filename:     `${cleanName}_Document.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, logging: false },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: 0,
+                filename: `${filenameString}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(container).save();
+            html2pdf().set(opt).from(element).save();
         }
 
         window.downloadTablePDF = function() {
             const element = document.getElementById('logsTableContainer');
             const opt = {
-                margin:       10,
-                filename:     'Sanchar_Cloud_Ledger_Logs.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                margin: 5,
+                filename: 'Cloud_Ledger_Logs.pdf',
+                image: { type: 'jpeg', quality: 0.95 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().from(element).set(opt).save();
         }
     </script>
 </body>

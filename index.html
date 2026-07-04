@@ -243,7 +243,7 @@
             font-family: Arial, sans-serif;
             width: 100%;
             max-width: 195mm;
-            min-height: 277mm; /* Added to keep design unified down the vertical baseline */
+            min-height: 277mm;
             box-sizing: border-box;
             margin: 0 auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.08);
@@ -301,7 +301,7 @@
         .challan-meta-left .meta-colon, .challan-meta-right .meta-colon { display: inline-block; width: 12px; }
 
         .challan-table-container {
-            flex-grow: 1; /* Automatically stretches column layout spacing smoothly down to footer context */
+            flex-grow: 1;
             padding: 0 12px;
         }
         .challan-goods-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
@@ -707,9 +707,10 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="itemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 50%;">Product Description *</th>
-                                            <th style="width: 30%;">Serial Number *</th>
-                                            <th style="width: 15%;">Qty *</th>
+                                            <th style="width: 40%;">Product Description *</th>
+                                            <th style="width: 25%;">Serial Number *</th>
+                                            <th style="width: 10%;">Qty *</th>
+                                            <th style="width: 20%;">Remark</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -718,6 +719,7 @@
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                                            <td><input type="text" class="form-control form-control-sm row-remark"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                                         </tr>
                                     </tbody>
@@ -815,9 +817,10 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="outwardItemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 45%;">Product Description *</th>
-                                            <th style="width: 30%;">Serial Number *</th>
-                                            <th style="width: 20%;">Qty *</th>
+                                            <th style="width: 40%;">Product Description *</th>
+                                            <th style="width: 25%;">Serial Number *</th>
+                                            <th style="width: 10%;">Qty *</th>
+                                            <th style="width: 20%;">Remark</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -826,6 +829,7 @@
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                                            <td><input type="text" class="form-control form-control-sm row-remark"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                                         </tr>
                                     </tbody>
@@ -1124,9 +1128,10 @@
                             <table class="table table-bordered table-hover align-middle bg-white mb-0">
                                 <thead class="table-light">
                                     <tr class="small text-uppercase">
-                                        <th style="width: 50%;">Product Description *</th>
-                                        <th style="width: 30%;">Serial Number *</th>
-                                        <th style="width: 15%;">Qty *</th>
+                                        <th style="width: 40%;">Product Description *</th>
+                                        <th style="width: 25%;">Serial Number *</th>
+                                        <th style="width: 10%;">Qty *</th>
+                                        <th style="width: 20%;">Remark</th>
                                         <th style="width: 5%; text-align:center;">Drop</th>
                                     </tr>
                                 </thead>
@@ -1332,7 +1337,7 @@
                         <td>${item.date}</td>
                         <td class="fw-semibold">${item.customerName}</td>
                         <td>${item.description}</td>
-                        <td><code>${item.remarks}</code></td>
+                        <td><code>${item.itemRemark || item.remarks}</code></td>
                         <td><button class="btn btn-xs btn-outline-primary py-1 px-2 text-xs" style="font-size:11px;" onclick="renderChallanDocument('${item.recordKey}')">Inspect</button></td>
                     `;
                     tbody.appendChild(tr);
@@ -1410,6 +1415,7 @@
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                <td><input type="text" class="form-control form-control-sm row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1422,6 +1428,7 @@
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                <td><input type="text" class="form-control form-control-sm row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1534,6 +1541,7 @@
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
                     quantity: itemQty.toFixed(2),
+                    remark: row.querySelector('.row-remark').value || 'NA',
                     issueFaced: "NA"
                 });
             });
@@ -1566,6 +1574,7 @@
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                            <td><input type="text" class="form-control form-control-sm row-remark"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                         </tr>
                     `;
@@ -1579,6 +1588,7 @@
                     alert("Database write rejected.");
                     procBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-2"></i>Save & Generate Challan`;
                     procBtn.disabled = false;
+                    switchTab('draft');
                 });
         }
 
@@ -1611,6 +1621,7 @@
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
                     quantity: itemQty.toFixed(2),
+                    remark: row.querySelector('.row-remark').value || 'NA',
                     issueFaced: "NA"
                 });
             });
@@ -1643,6 +1654,7 @@
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
+                            <td><input type="text" class="form-control form-control-sm row-remark"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                         </tr>
                     `;
@@ -1713,7 +1725,7 @@
                     <td>${item.customerName || '-'}</td>
                     <td class="small text-muted" style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.address || ''}">${item.address || '-'}</td>
                     <td class="text-nowrap">${item.date || '-'}</td>
-                    <td class="text-secondary small">${item.remarks || '-'}</td>
+                    <td class="text-secondary small">${item.itemRemark || item.remarks || '-'}</td>
                     <td class="text-center">
                         <button class="btn btn-sm btn-outline-primary px-2 py-1 text-nowrap" style="font-size: 11px;" onclick="renderChallanDocument('${item.recordKey}')">
                             <i class="fa-solid fa-file-invoice me-1"></i> ${item.challanNo}
@@ -1900,6 +1912,7 @@
                 <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm de-row-serial" required></td>
                 <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="1"></td>
+                <td><input type="text" class="form-control form-control-sm de-row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
             `;
             tbody.appendChild(row);
@@ -1937,6 +1950,7 @@
                     <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions" value="${prod.description || ''}"></td>
                     <td><input type="text" class="form-control form-control-sm de-row-serial" required value="${prod.serialNo || ''}"></td>
                     <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="${parseFloat(prod.quantity) || 1}"></td>
+                    <td><input type="text" class="form-control form-control-sm de-row-remark" value="${prod.remark || ''}"></td>
                     <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
                 `;
                 itemsBody.appendChild(row);
@@ -1968,6 +1982,7 @@
                     description: row.querySelector('.de-row-desc').value,
                     serialNo: row.querySelector('.de-row-serial').value,
                     quantity: itemQty.toFixed(2),
+                    remark: row.querySelector('.de-row-remark').value || 'NA',
                     issueFaced: "NA"
                 });
             });
@@ -2079,6 +2094,7 @@
                             customerName: item.customerName,
                             address: item.address,
                             remarks: item.remarks || 'NA',
+                            itemRemark: p.remark || 'NA',
                             itemModel: p.itemModel || 'NA',
                             description: p.description,
                             serialNo: p.serialNo,
@@ -2123,7 +2139,7 @@
                         <td>${item.description || ''}</td>
                         <td>${item.serialNo || ''}</td>
                         <td>${parseFloat(item.quantity || 0)}</td>
-                        <td>NA</td>
+                        <td>${item.remark || 'NA'}</td>
                     </tr>`;
             }).join('');
         }
@@ -2132,10 +2148,10 @@
             return `
                 <tr>
                     <th style="width: 10%;">S.No.</th>
-                    <th style="width: 45%;">Product Description</th>
+                    <th style="width: 40%;">Product Description</th>
                     <th style="width: 25%;">Serial No.</th>
                     <th style="width: 10%;">Quantity</th>
-                    <th style="width: 10%;">Remarks</th>
+                    <th style="width: 15%;">Remarks</th>
                 </tr>`;
         }
 
@@ -2339,44 +2355,40 @@
             printContainer.innerHTML = comprehensiveChallanHtml;
             viewSection.style.display = "block";
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            window.currentActiveViewingChallanNo = targetData.challanNo;
         }
 
         window.closeChallanView = function() {
-            document.getElementById('challanViewSection').style.display = "none";
-            if(window.currentActiveViewingChallanNo && window.currentActiveViewingChallanNo.includes('STELE/RC/')) {
-                switchTab('challan');
-            } else if(window.currentActiveViewingChallanNo && window.currentActiveViewingChallanNo.includes('STELE/DC/')) {
-                switchTab('challan');
-            } else {
-                switchTab('dashboard');
+            document.getElementById('challanViewSection').style.display = 'none';
+            if(document.getElementById('sideTabDash').classList.contains('active')) {
+                document.getElementById('dashboardHudModule').style.display = 'block';
+            } else if(document.getElementById('sideTabIssue').classList.contains('active')) {
+                document.getElementById('issueModule').style.display = 'block';
+            } else if(document.getElementById('sideTabOutward').classList.contains('active')) {
+                document.getElementById('outwardModule').style.display = 'block';
+            } else if(document.getElementById('sideTabDraft').classList.contains('active')) {
+                document.getElementById('draftChallanModule').style.display = 'block';
+            } else if(document.getElementById('sideTabChallan').classList.contains('active')) {
+                document.getElementById('challanListModule').style.display = 'block';
+            } else if(document.getElementById('sideTabSerialTracker').classList.contains('active')) {
+                document.getElementById('serialTrackerModule').style.display = 'block';
+            } else if(document.getElementById('sideTabMaster').classList.contains('active')) {
+                document.getElementById('masterToolModule').style.display = 'block';
             }
         }
 
         window.downloadSingleChallanPDF = function() {
             const element = document.getElementById('challanPrintContainer');
-            const filenameString = (window.currentActiveViewingChallanNo || "Challan").replace(/\//g, '_');
+            const challanNoRaw = document.querySelector('.challan-meta-right div:first-child').innerText;
+            const cleanChallanName = challanNoRaw.replace('Challan No.:', '').trim().replace(/\//g, '_');
+            
             const opt = {
                 margin: 0,
-                filename: `${filenameString}.pdf`,
+                filename: `Challan_${cleanChallanName}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(opt).save();
-        }
-
-        window.downloadTablePDF = function() {
-            const element = document.getElementById('logsTableContainer');
-            const opt = {
-                margin: 10,
-                filename: 'Sanchar_Challan_Logs.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-            html2pdf().from(element).set(opt).save();
+            html2pdf().set(opt).from(element).save();
         }
     </script>
 </body>

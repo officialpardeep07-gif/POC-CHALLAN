@@ -256,6 +256,7 @@
         .challan-print-box + .challan-print-box { margin-top: 30px; }
         .challan-print-box:not(:last-child) { page-break-after: always; break-after: page; }
 
+        /* Modified: Simplified Header Bar Style */
         .challan-bar-title {
             position: relative;
             background: var(--challan-navy) !important;
@@ -269,15 +270,8 @@
         }
         .challan-bar-title, .challan-bar-title * { color: #ffffff !important; }
         .challan-bar-title::before, .challan-bar-title::after {
-            content: "";
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 90px;
-            background: repeating-linear-gradient(55deg, transparent, transparent 7px, rgba(255,255,255,0.22) 7px, rgba(255,255,255,0.22) 14px);
-            pointer-events: none;
+            display: none !important; /* Strips patterns hidden */
         }
-        .challan-bar-title::before { left: 0; }
-        .challan-bar-title::after { right: 0; }
 
         .challan-top-header { text-align: center; padding: 14px 20px 10px; background: #fff; }
         .challan-top-header h2 { margin: 0 0 12px; font-size: 27px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--challan-navy) !important; }
@@ -2311,21 +2305,20 @@
                             <div class="challan-meta-box-title"><i class="fa-solid fa-user"></i>Challan Issued To</div>
                             <div class="meta-box-body">
                                 <strong>${targetData.customerName || ''}</strong><br>
-                                ${targetData.address || ''}<br>
-                                <span class="mt-2 d-block"><strong>GSTIN / PAN:</strong> ${targetData.gstNumber || 'NA'}</span>
+                                <span class="text-muted d-block mt-1" style="line-height:1.4;">${targetData.address || ''}</span>
                             </div>
                         </div>
                         <div class="challan-meta-right">
-                            <div class="challan-meta-box-title"><i class="fa-solid fa-circle-info"></i>Document Reference</div>
+                            <div class="challan-meta-box-title"><i class="fa-solid fa-circle-info"></i>Logistical Metadata</div>
                             <div class="meta-box-body">
-                                <div><span class="meta-label">Challan No.</span><span class="meta-colon">:</span><strong>${targetData.challanNo || ''}</strong></div>
-                                <div><span class="meta-label">Date</span><span class="meta-colon">:</span>${targetData.receivingDate || ''}</div>
-                                <div><span class="meta-label">Nature of Elg</span><span class="meta-colon">:</span>Non-Commercial</div>
+                                <div><span class="meta-label">Challan No</span><span class="meta-colon">:</span><strong>${targetData.challanNo || ''}</strong></div>
+                                <div><span class="meta-label">Challan Date</span><span class="meta-colon">:</span>${targetData.receivingDate || ''}</div>
+                                <div><span class="meta-label">Customer GST</span><span class="meta-colon">:</span><code>${targetData.gstNumber || ''}</code></div>
                             </div>
                         </div>
                     </div>
 
-                    <div style="padding: 0 12px;">
+                    <div style="padding:0 12px; box-sizing:border-box;">
                         <table class="challan-goods-table">
                             <thead>
                                 ${buildGoodsTableHeadHtml(isDelivery)}
@@ -2340,38 +2333,45 @@
                     ${bottomSectionHtml}
 
                     <div class="challan-contact-footer">
-                        <span><i class="fa-solid fa-phone"></i>+91-11-41406606</span>
+                        <span><i class="fa-solid fa-phone"></i>+91-11-41708899</span>
                         <span><i class="fa-solid fa-globe"></i>www.sanchartelesystems.com</span>
                     </div>
-                    <div class="challan-thankyou-bar">THANK YOU FOR BUSINESS WITH US</div>
+                    <div class="challan-thankyou-bar">
+                        THANK YOU FOR YOUR BUSINESS COOPERATION
+                    </div>
                 </div>`;
         }
 
-        window.renderChallanDocument = function(key) {
-            const targetData = fetchedChallans[key];
-            if (!targetData) return;
+        window.renderChallanDocument = function(recordIdKey) {
+            const targetData = fetchedChallans[recordIdKey];
+            if(!targetData) return;
 
             const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STELE/DC/'));
             const items = targetData.items || [];
-            const totalPages = Math.max(1, Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE));
+            
+            let totalPages = Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE);
+            if (totalPages === 0) totalPages = 1;
 
-            let multiPageHtml = '';
+            let compiledHtml = "";
             for (let i = 0; i < totalPages; i++) {
-                const startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
-                const pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
-                multiPageHtml += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
+                let startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
+                let pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
+                compiledHtml += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
             }
 
-            document.getElementById('challanPrintContainer').innerHTML = multiPageHtml;
-
             document.getElementById('dashboardHudModule').style.display = 'none';
+            document.getElementById('issueModule').style.display = 'none';
+            document.getElementById('outwardModule').style.display = 'none';
+            document.getElementById('draftChallanModule').style.display = 'none';
             document.getElementById('challanListModule').style.display = 'none';
             document.getElementById('serialTrackerModule').style.display = 'none';
             document.getElementById('masterToolModule').style.display = 'none';
-            document.getElementById('searchResultLogContainer').classList.add('d-none');
-            
+
+            const printFrame = document.getElementById('challanPrintContainer');
+            printFrame.innerHTML = compiledHtml;
+
+            document.getElementById('pageTitleContext').innerText = `Document Inspection Gateway (${targetData.challanNo})`;
             document.getElementById('challanViewSection').style.display = 'block';
-            document.getElementById('pageTitleContext').innerText = "Document Inspection Viewer";
         }
 
         window.closeChallanView = function() {
@@ -2380,25 +2380,31 @@
         }
 
         window.downloadSingleChallanPDF = function() {
-            const element = document.getElementById('challanPrintContainer');
+            const container = document.getElementById('challanPrintContainer');
+            const targetBox = container.querySelector('.challan-print-box');
+            if(!targetBox) return;
+            
+            const txt = targetBox.querySelector('.challan-bar-title').innerText || 'Challan';
+            const cleanName = txt.replace(/\s+/g, '_');
+
             const opt = {
-                margin: 0,
-                filename: 'Sanchar_Challan_Document.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin:       [5, 5, 5, 5],
+                filename:     `${cleanName}_Document.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set(opt).from(container).save();
         }
 
         window.downloadTablePDF = function() {
             const element = document.getElementById('logsTableContainer');
             const opt = {
-                margin: 5,
-                filename: 'Sanchar_Inventory_Ledger_Logs.pdf',
-                image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: { scale: 1.5 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                margin:       10,
+                filename:     'Sanchar_Cloud_Ledger_Logs.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             html2pdf().set(opt).from(element).save();
         }

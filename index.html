@@ -638,9 +638,10 @@
                             <table class="custom-table" id="stockSummaryTable">
                                 <thead>
                                     <tr>
-                                        <th>Item Model No</th>
                                         <th>Product Description</th>
                                         <th>Serial Number</th>
+                                        <th>IMEI 1</th>
+                                        <th>IMEI 2</th>
                                         <th>Qty</th>
                                         <th>Customer Name</th>
                                         <th>Address</th>
@@ -651,7 +652,7 @@
                                 </thead>
                                 <tbody id="stockSummaryTableBody">
                                     <tr>
-                                        <td colspan="9" class="text-center py-3 text-muted">Loading stock balance registers...</td>
+                                        <td colspan="10" class="text-center py-3 text-muted">Loading stock balance registers...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -707,10 +708,12 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="itemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 40%;">Product Description *</th>
-                                            <th style="width: 25%;">Serial Number *</th>
-                                            <th style="width: 10%;">Qty *</th>
-                                            <th style="width: 20%;">Remark</th>
+                                            <th style="width: 30%;">Product Description *</th>
+                                            <th style="width: 20%;">Serial Number *</th>
+                                            <th style="width: 15%;">IMEI 1</th>
+                                            <th style="width: 15%;">IMEI 2</th>
+                                            <th style="width: 8%;">Qty *</th>
+                                            <th style="width: 12%;">Remark</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -718,6 +721,8 @@
                                         <tr>
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                                            <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                                            <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                                             <td><input type="text" class="form-control form-control-sm row-remark"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -817,10 +822,12 @@
                                 <table class="table table-bordered table-hover align-middle bg-white mb-0" id="outwardItemAdditionTable">
                                     <thead class="table-light">
                                         <tr class="small text-uppercase">
-                                            <th style="width: 40%;">Product Description *</th>
-                                            <th style="width: 25%;">Serial Number *</th>
-                                            <th style="width: 10%;">Qty *</th>
-                                            <th style="width: 20%;">Remark</th>
+                                            <th style="width: 30%;">Product Description *</th>
+                                            <th style="width: 20%;">Serial Number *</th>
+                                            <th style="width: 15%;">IMEI 1</th>
+                                            <th style="width: 15%;">IMEI 2</th>
+                                            <th style="width: 8%;">Qty *</th>
+                                            <th style="width: 12%;">Remark</th>
                                             <th style="width: 5%; text-align:center;">Drop</th>
                                         </tr>
                                     </thead>
@@ -828,6 +835,8 @@
                                         <tr>
                                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                                            <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                                            <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                                             <td><input type="text" class="form-control form-control-sm row-remark"></td>
                                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -925,13 +934,13 @@
 
                 <div id="serialTrackerModule" class="panel-card" style="display: none;">
                     <div class="panel-title text-success"><i class="fa-solid fa-clock-rotate-left"></i> Advance Serial Number Lifecycle Tracker</div>
-                    <p class="text-muted small">Automatically check the trace logs of any hardware serial number from the system database history.</p>
+                    <p class="text-muted small">Automatically check the trace logs of any hardware serial number or IMEI from the system database history.</p>
                     
                     <div class="row g-3 mb-4">
                         <div class="col-md-8">
                             <div class="form-floating">
-                                <input type="text" class="form-control" id="txtTrackerSerialSearch" placeholder="Enter Serial Number" autocomplete="off">
-                                <label for="txtTrackerSerialSearch">Enter Hardware Serial Number</label>
+                                <input type="text" class="form-control" id="txtTrackerSerialSearch" placeholder="Enter Serial Number or IMEI" autocomplete="off">
+                                <label for="txtTrackerSerialSearch">Enter Hardware Serial Number / IMEI</label>
                             </div>
                         </div>
                         <div class="col-md-4 d-flex align-items-center">
@@ -1128,10 +1137,12 @@
                             <table class="table table-bordered table-hover align-middle bg-white mb-0">
                                 <thead class="table-light">
                                     <tr class="small text-uppercase">
-                                        <th style="width: 40%;">Product Description *</th>
-                                        <th style="width: 25%;">Serial Number *</th>
-                                        <th style="width: 10%;">Qty *</th>
-                                        <th style="width: 20%;">Remark</th>
+                                        <th style="width: 30%;">Product Description *</th>
+                                        <th style="width: 20%;">Serial Number *</th>
+                                        <th style="width: 15%;">IMEI 1</th>
+                                        <th style="width: 15%;">IMEI 2</th>
+                                        <th style="width: 8%;">Qty *</th>
+                                        <th style="width: 12%;">Remark</th>
                                         <th style="width: 5%; text-align:center;">Drop</th>
                                     </tr>
                                 </thead>
@@ -1305,13 +1316,13 @@
         }
 
         window.executeSerialTracking = function() {
-            const query = document.getElementById('txtTrackerSerialSearch').value.trim();
+            const query = document.getElementById('txtTrackerSerialSearch').value.trim().toLowerCase();
             const summaryDiv = document.getElementById('divSerialTrackerSummary');
             const resultsDiv = document.getElementById('divSerialTrackerResults');
             const tbody = document.getElementById('trackerTableBody');
 
             if (!query) {
-                alert("Please write a valid serial number.");
+                alert("Please write a valid serial number or IMEI.");
                 return;
             }
 
@@ -1321,7 +1332,11 @@
             let outCount = 0;
 
             globalStockBreakdownItems.forEach(item => {
-                if (item.serialNo && item.serialNo.toLowerCase() === query.toLowerCase()) {
+                const matchSerial = item.serialNo && item.serialNo.toLowerCase() === query;
+                const matchImei1 = item.imei1 && item.imei1.toLowerCase() === query;
+                const matchImei2 = item.imei2 && item.imei2.toLowerCase() === query;
+
+                if (matchSerial || matchImei1 || matchImei2) {
                     matchCount++;
                     if (item.type === 'receipt') inCount++;
                     if (item.type === 'delivery') outCount++;
@@ -1337,7 +1352,7 @@
                         <td>${item.date}</td>
                         <td class="fw-semibold">${item.customerName}</td>
                         <td>${item.description}</td>
-                        <td><code>${item.itemRemark || item.remarks}</code></td>
+                        <td><code>S/N: ${item.serialNo || 'NA'} | IMEI1: ${item.imei1 || 'NA'}</code></td>
                         <td><button class="btn btn-xs btn-outline-primary py-1 px-2 text-xs" style="font-size:11px;" onclick="renderChallanDocument('${item.recordKey}')">Inspect</button></td>
                     `;
                     tbody.appendChild(tr);
@@ -1353,7 +1368,7 @@
             } else {
                 summaryDiv.classList.add('d-none');
                 resultsDiv.classList.remove('d-none');
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No records found for serial number: <strong>"${query}"</strong></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No records found for identifier: <strong>"${query}"</strong></td></tr>`;
             }
         };
 
@@ -1414,6 +1429,8 @@
             row.innerHTML = `
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                 <td><input type="text" class="form-control form-control-sm row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1427,6 +1444,8 @@
             row.innerHTML = `
                 <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                 <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                 <td><input type="text" class="form-control form-control-sm row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1486,7 +1505,11 @@
                 
                 let matchSerial = false;
                 if(item.items && Array.isArray(item.items)) {
-                    matchSerial = item.items.some(prod => prod.serialNo && prod.serialNo.toLowerCase().includes(query));
+                    matchSerial = item.items.some(prod => 
+                        (prod.serialNo && prod.serialNo.toLowerCase().includes(query)) ||
+                        (prod.imei1 && prod.imei1.toLowerCase().includes(query)) ||
+                        (prod.imei2 && prod.imei2.toLowerCase().includes(query))
+                    );
                 }
 
                 if(matchChallanNo || matchDate || matchCustomer || matchSerial) {
@@ -1540,6 +1563,8 @@
                     itemModel: "NA",
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
+                    imei1: row.querySelector('.row-imei1').value || 'NA',
+                    imei2: row.querySelector('.row-imei2').value || 'NA',
                     quantity: itemQty.toFixed(2),
                     remark: row.querySelector('.row-remark').value || 'NA',
                     issueFaced: "NA"
@@ -1573,6 +1598,8 @@
                         <tr>
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                            <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                            <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                             <td><input type="text" class="form-control form-control-sm row-remark"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1620,6 +1647,8 @@
                     itemModel: "NA",
                     description: row.querySelector('.row-desc').value,
                     serialNo: row.querySelector('.row-serial').value,
+                    imei1: row.querySelector('.row-imei1').value || 'NA',
+                    imei2: row.querySelector('.row-imei2').value || 'NA',
                     quantity: itemQty.toFixed(2),
                     remark: row.querySelector('.row-remark').value || 'NA',
                     issueFaced: "NA"
@@ -1653,6 +1682,8 @@
                         <tr>
                             <td><input type="text" class="form-control form-control-sm row-desc" required list="cachedItemDescriptions"></td>
                             <td><input type="text" class="form-control form-control-sm row-serial" required></td>
+                            <td><input type="text" class="form-control form-control-sm row-imei1"></td>
+                            <td><input type="text" class="form-control form-control-sm row-imei2"></td>
                             <td><input type="number" class="form-control form-control-sm row-qty" min="1" step="1" required value="1"></td>
                             <td><input type="text" class="form-control form-control-sm row-remark"></td>
                             <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1711,16 +1742,17 @@
             });
 
             if(filteredItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-3 text-muted">No specific item rows matches this operational filter.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="text-center py-3 text-muted">No specific item rows matches this operational filter.</td></tr>`;
                 return;
             }
 
             filteredItems.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="fw-bold">${item.itemModel || '-'}</td>
                     <td>${item.description || '-'}</td>
                     <td><span class="badge bg-light text-dark border">${item.serialNo || '-'}</span></td>
+                    <td>${item.imei1 || '-'}</td>
+                    <td>${item.imei2 || '-'}</td>
                     <td class="fw-semibold text-center">${parseFloat(item.quantity || 0)}</td>
                     <td>${item.customerName || '-'}</td>
                     <td class="small text-muted" style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${item.address || ''}">${item.address || '-'}</td>
@@ -1901,7 +1933,7 @@
                         </div>
                     </td>
                 `;
-                tbody.appendChild(tr);
+                tableBody.appendChild(tr);
             });
         }
 
@@ -1911,6 +1943,8 @@
             row.innerHTML = `
                 <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions"></td>
                 <td><input type="text" class="form-control form-control-sm de-row-serial" required></td>
+                <td><input type="text" class="form-control form-control-sm de-row-imei1"></td>
+                <td><input type="text" class="form-control form-control-sm de-row-imei2"></td>
                 <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="1"></td>
                 <td><input type="text" class="form-control form-control-sm de-row-remark"></td>
                 <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1949,6 +1983,8 @@
                 row.innerHTML = `
                     <td><input type="text" class="form-control form-control-sm de-row-desc" required list="cachedItemDescriptions" value="${prod.description || ''}"></td>
                     <td><input type="text" class="form-control form-control-sm de-row-serial" required value="${prod.serialNo || ''}"></td>
+                    <td><input type="text" class="form-control form-control-sm de-row-imei1" value="${prod.imei1 || 'NA'}"></td>
+                    <td><input type="text" class="form-control form-control-sm de-row-imei2" value="${prod.imei2 || 'NA'}"></td>
                     <td><input type="number" class="form-control form-control-sm de-row-qty" min="1" step="1" required value="${parseFloat(prod.quantity) || 1}"></td>
                     <td><input type="text" class="form-control form-control-sm de-row-remark" value="${prod.remark || ''}"></td>
                     <td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeRow(this)"><i class="fa-regular fa-trash-can"></i></button></td>
@@ -1981,6 +2017,8 @@
                     itemModel: "NA",
                     description: row.querySelector('.de-row-desc').value,
                     serialNo: row.querySelector('.de-row-serial').value,
+                    imei1: row.querySelector('.de-row-imei1').value || 'NA',
+                    imei2: row.querySelector('.de-row-imei2').value || 'NA',
                     quantity: itemQty.toFixed(2),
                     remark: row.querySelector('.de-row-remark').value || 'NA',
                     issueFaced: "NA"
@@ -2053,7 +2091,7 @@
                 globalStockBreakdownItems = [];
                 window.customerAutocompleteMap = {};
                 document.getElementById('dbTableBody').innerHTML = `<tr><td colspan="6" class="text-center py-3 text-muted">No System Records Linked in Core Architecture.</td></tr>`;
-                document.getElementById('stockSummaryTableBody').innerHTML = `<tr><td colspan="9" class="text-center py-3 text-muted">No item records available.</td></tr>`;
+                document.getElementById('stockSummaryTableBody').innerHTML = `<tr><td colspan="10" class="text-center py-3 text-muted">No item records available.</td></tr>`;
                 document.getElementById('metricTotalChallans').innerText = "0";
                 document.getElementById('summaryReceivedUnits').innerText = "0";
                 document.getElementById('summaryDispatchedUnits').innerText = "0";
@@ -2098,6 +2136,8 @@
                             itemModel: p.itemModel || 'NA',
                             description: p.description,
                             serialNo: p.serialNo,
+                            imei1: p.imei1 || 'NA',
+                            imei2: p.imei2 || 'NA',
                             quantity: calculatedQty
                         });
                     });
@@ -2138,6 +2178,8 @@
                         <td>${sno}</td>
                         <td>${item.description || ''}</td>
                         <td>${item.serialNo || ''}</td>
+                        <td>${item.imei1 || 'NA'}</td>
+                        <td>${item.imei2 || 'NA'}</td>
                         <td>${parseFloat(item.quantity || 0)}</td>
                         <td>${item.remark || 'NA'}</td>
                     </tr>`;
@@ -2147,11 +2189,13 @@
         function buildGoodsTableHeadHtml() {
             return `
                 <tr>
-                    <th style="width: 10%;">S.No.</th>
-                    <th style="width: 40%;">Product Description</th>
-                    <th style="width: 25%;">Serial No.</th>
-                    <th style="width: 10%;">Quantity</th>
-                    <th style="width: 15%;">Remarks</th>
+                    <th style="width: 5%;">S.No.</th>
+                    <th style="width: 30%;">Product Description</th>
+                    <th style="width: 20%;">Serial No.</th>
+                    <th style="width: 15%;">IMEI 1</th>
+                    <th style="width: 15%;">IMEI 2</th>
+                    <th style="width: 5%;">Qty</th>
+                    <th style="width: 10%;">Remarks</th>
                 </tr>`;
         }
 
@@ -2297,6 +2341,8 @@
                             </div>
                         </div>
 
+                        ${dispatchBarHtml}
+
                         <div class="challan-table-container">
                             <table class="challan-goods-table">
                                 <thead>
@@ -2307,88 +2353,73 @@
                                 </tbody>
                             </table>
                         </div>
-
-                        ${dispatchBarHtml}
                     </div>
 
-                    <div>
-                        ${bottomSectionHtml}
-                        <div class="challan-contact-footer">
-                            <span><i class="fa-solid fa-phone"></i> Ph : + 91-(11)-46528894-97</span>
-                            <span><i class="fa-solid fa-globe"></i> www.sanchartelesystems.com</span>
-                        </div>
-                        <div class="challan-thankyou-bar">Thank You</div>
+                    ${bottomSectionHtml}
+
+                    <div class="challan-thankyou-bar">
+                        TRUSTED WIRELESS COMMUNICATION SOLUTIONS
                     </div>
                 </div>`;
         }
 
         window.renderChallanDocument = function(recordKey) {
             const targetData = fetchedChallans[recordKey];
-            if(!targetData) {
-                alert("Ledger matching element missing.");
-                return;
-            }
+            if(!targetData) return;
+
+            document.getElementById('dashboardHudModule').style.display = 'none';
+            document.getElementById('challanListModule').style.display = 'none';
+            document.getElementById('serialTrackerModule').style.display = 'none';
+            document.getElementById('challanViewSection').style.display = 'block';
+            
+            document.getElementById('pageTitleContext').innerText = `Review Document Logs (${targetData.challanNo})`;
 
             const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STELE/DC/'));
             const items = targetData.items || [];
             
-            const totalPages = Math.max(1, Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE));
-            let comprehensiveChallanHtml = "";
+            let totalPages = Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE);
+            if(totalPages === 0) totalPages = 1;
 
+            let finalHtmlStream = "";
             for (let i = 0; i < totalPages; i++) {
-                const startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
-                const pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
-                comprehensiveChallanHtml += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
+                let startIndex = i * MAX_ITEMS_PER_CHALLAN_PAGE;
+                let pageItems = items.slice(startIndex, startIndex + MAX_ITEMS_PER_CHALLAN_PAGE);
+                finalHtmlStream += buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, i + 1, totalPages);
             }
 
-            document.getElementById('dashboardHudModule').style.display = 'none';
-            document.getElementById('issueModule').style.display = 'none';
-            document.getElementById('outwardModule').style.display = 'none';
-            document.getElementById('draftChallanModule').style.display = 'none';
-            document.getElementById('challanListModule').style.display = 'none';
-            document.getElementById('serialTrackerModule').style.display = 'none';
-            document.getElementById('masterToolModule').style.display = 'none';
-            
-            const viewSection = document.getElementById('challanViewSection');
-            const printContainer = document.getElementById('challanPrintContainer');
-            
-            printContainer.innerHTML = comprehensiveChallanHtml;
-            viewSection.style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('challanPrintContainer').innerHTML = finalHtmlStream;
         }
 
         window.closeChallanView = function() {
             document.getElementById('challanViewSection').style.display = 'none';
-            if(document.getElementById('sideTabDash').classList.contains('active')) {
-                document.getElementById('dashboardHudModule').style.display = 'block';
-            } else if(document.getElementById('sideTabIssue').classList.contains('active')) {
-                document.getElementById('issueModule').style.display = 'block';
-            } else if(document.getElementById('sideTabOutward').classList.contains('active')) {
-                document.getElementById('outwardModule').style.display = 'block';
-            } else if(document.getElementById('sideTabDraft').classList.contains('active')) {
-                document.getElementById('draftChallanModule').style.display = 'block';
-            } else if(document.getElementById('sideTabChallan').classList.contains('active')) {
-                document.getElementById('challanListModule').style.display = 'block';
-            } else if(document.getElementById('sideTabSerialTracker').classList.contains('active')) {
-                document.getElementById('serialTrackerModule').style.display = 'block';
-            } else if(document.getElementById('sideTabMaster').classList.contains('active')) {
-                document.getElementById('masterToolModule').style.display = 'block';
-            }
+            switchTab('challan');
         }
 
         window.downloadSingleChallanPDF = function() {
-            const element = document.getElementById('challanPrintContainer');
-            const challanNoRaw = document.querySelector('.challan-meta-right div:first-child').innerText;
-            const cleanChallanName = challanNoRaw.replace('Challan No.:', '').trim().replace(/\//g, '_');
-            
-            const opt = {
+            const frame = document.getElementById('challanPrintContainer');
+            const targetNo = document.getElementById('pageTitleContext').innerText.match(/STELE\/[^\s)]+/);
+            const fileNameString = targetNo ? targetNo[0].replace(/\//g, '_') : 'challan_document';
+
+            const configurations = {
                 margin: 0,
-                filename: `Challan_${cleanChallanName}.pdf`,
+                filename: `${fileNameString}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set(configurations).from(frame).save();
+        }
+
+        window.downloadTablePDF = function() {
+            const element = document.getElementById('logsTableContainer');
+            const config = {
+                margin: 5,
+                filename: 'Cloud_Inventory_Logs.pdf',
+                image: { type: 'jpeg', quality: 0.95 },
+                html2canvas: { scale: 1.5 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+            html2pdf().set(config).from(element).save();
         }
     </script>
 </body>

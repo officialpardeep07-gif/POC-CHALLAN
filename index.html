@@ -560,7 +560,7 @@
                     <div class="mb-4">
                         <div class="input-group shadow-sm border-0">
                             <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" class="form-control border-start-0 py-2" id="dashboardGlobalSearch" placeholder="Search entries by Date, Challan No, Customer Name or Serial Number..." oninput="triggerDashboardSearch()">
+                            <input type="text" class="form-control border-start-0 py-2" id="dashboardGlobalSearch" placeholder="Search entries by Date, MRN No, Customer Name or Serial Number..." oninput="triggerDashboardSearch()">
                         </div>
                     </div>
 
@@ -905,7 +905,7 @@
                     <div class="mb-3">
                         <div class="input-group input-group-sm shadow-sm border-0">
                             <span class="input-group-text bg-white text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                            <input type="text" class="form-control" id="challanOperationsSearch" placeholder="Search logs by Challan No, Customer, GST, Type..." oninput="renderTableRows()">
+                            <input type="text" class="form-control" id="challanOperationsSearch" placeholder="Search logs by MRN No, Customer, GST, Type..." oninput="renderTableRows()">
                         </div>
                     </div>
                     
@@ -974,7 +974,7 @@
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th>Challan No</th>
+                                    <th>MRN No</th>
                                     <th>Type</th>
                                     <th>Log Date</th>
                                     <th>Customer Name</th>
@@ -995,7 +995,7 @@
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th>Challan No</th>
+                                    <th>MRN No</th>
                                     <th>Date</th>
                                     <th>Customer Name</th>
                                     <th>Type</th>
@@ -1047,7 +1047,7 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <button class="btn btn-outline-primary w-100 py-3 fw-semibold" onclick="applyChallanFilter('receipt')" data-bs-dismiss="modal">
-                                <i class="fa-solid fa-file-arrow-down fs-4 d-block mb-2"></i> Receipt Challan
+                                <i class="fa-solid fa-file-arrow-down fs-4 d-block mb-2"></i> MATERIAL RECEIPT NOTE
                             </button>
                         </div>
                         <div class="col-6">
@@ -1541,9 +1541,9 @@
             const yyyy = dateObj.getFullYear();
             const formattedDateString = `${dd} - ${mm} - ${yyyy}`;
 
-            let receiptCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STELE/RC/')).length;
+            let receiptCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('RC/POC')).length;
             const formattedSerialNo = String(receiptCount + 1).padStart(3, '0');
-            const dynamicChallanNumber = `STELE/RC/26-27/${formattedSerialNo}`;
+            const dynamicChallanNumber = `RC/POC/26-27/${formattedSerialNo}`;
 
             const itemRows = document.querySelectorAll('#itemTableBody tr');
             let itemsArray = [];
@@ -1625,9 +1625,9 @@
             const yyyy = dateObj.getFullYear();
             const formattedDateString = `${dd} - ${mm} - ${yyyy}`;
 
-            let outwardCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STELE/DC/')).length;
+            let outwardCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('DC/POC/')).length;
             const formattedSerialNo = String(outwardCount + 1).padStart(3, '0');
-            const dynamicChallanNumber = `STELE/DC/26-27/${formattedSerialNo}`;
+            const dynamicChallanNumber = `DC/POC/26-27/${formattedSerialNo}`;
 
             const itemRows = document.querySelectorAll('#outwardItemTableBody tr');
             let itemsArray = [];
@@ -1769,7 +1769,7 @@
             tableBody.innerHTML = "";
 
             if(currentFilterMode === 'receipt') {
-                filterLabel.innerText = "Receipt Challans Only";
+                filterLabel.innerText = "MATERIAL RECEIPT NOTE Only";
             } else if(currentFilterMode === 'delivery') {
                 filterLabel.innerText = "Delivery Challans (Outward) Only";
             } else {
@@ -1783,9 +1783,9 @@
 
                 let typeMatch = true;
                 if(currentFilterMode === 'receipt') {
-                    typeMatch = (item.type === 'receipt' || (!item.type && item.challanNo.includes('STELE/RC/')));
+                    typeMatch = (item.type === 'receipt' || (!item.type && item.challanNo.includes('RC/POC/')));
                 } else if(currentFilterMode === 'delivery') {
-                    typeMatch = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/'));
+                    typeMatch = (item.type === 'delivery' || item.challanNo.includes('DC/POC/'));
                 }
                 
                 if (!typeMatch) return false;
@@ -1833,7 +1833,7 @@
 
             keys.forEach(key => {
                 const item = fetchedChallans[key];
-                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ? 
+                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('DC/POC/')) ? 
                     `<span class="badge bg-info text-dark">Outward</span>` : `<span class="badge bg-primary">Receipt</span>`;
                 
                 const tr = document.createElement('tr');
@@ -1909,7 +1909,7 @@
 
             keys.forEach(key => {
                 const item = fetchedChallans[key];
-                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ?
+                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('DC/POC/')) ?
                     `<span class="badge bg-info text-dark">Delivery</span>` : `<span class="badge bg-primary">Receipt</span>`;
 
                 const tr = document.createElement('tr');
@@ -2104,7 +2104,7 @@
             Object.keys(data).forEach(key => {
                 const item = data[key];
                 totalRecordsCount++;
-                const currentChallanType = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ? 'delivery' : 'receipt';
+                const currentChallanType = (item.type === 'delivery' || item.challanNo.includes('DC/POC/')) ? 'delivery' : 'receipt';
                 let currentItemQty = 0;
                 
                 if(item.customerName && item.customerName.trim() !== '') {
@@ -2195,7 +2195,7 @@
 
         function buildChallanPageHtml(targetData, isDelivery, pageItems, startIndex, pageNumber, totalPages) {
             const isLastPage = pageNumber === totalPages;
-            const titleText = isDelivery ? "DELIVERY CHALLAN" : "RECEIPT CHALLAN";
+            const titleText = isDelivery ? "DELIVERY CHALLAN" : "MATERIAL RECEIPT NOTE";
             const pageBadge = totalPages > 1 ? `<span style="position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:11px; letter-spacing:0.5px; background:rgba(255,255,255,0.15); padding:3px 10px; border-radius:12px;">Page ${pageNumber} of ${totalPages}</span>` : '';
 
             let dispatchBarHtml = '';
@@ -2313,7 +2313,7 @@
                             <div class="gst-line small fw-bold mt-2">
                                 <span><i class="fa-solid fa-fingerprint"></i> GSTIN: 07AAKCS3561K1ZZ</span>
                                 <span class="sep">|</span>
-                                <span><i class="fa-solid fa-envelope"></i> info@sanchartelesystems.com</span>
+                                <span><i class="fa-solid fa-envelope"></i> stele.support@sanchartelesystems.com</span>
                             </div>
                         </div>
 
@@ -2329,7 +2329,7 @@
                             <div class="challan-meta-right">
                                 <div class="challan-meta-box-title"><i class="fa-solid fa-file-invoice"></i> Transaction Logistics</div>
                                 <div class="meta-box-body">
-                                    <div><span class="meta-label">Challan No.</span><span class="meta-colon">:</span><strong>${targetData.challanNo}</strong></div>
+                                    <div><span class="meta-label">MRN No.</span><span class="meta-colon">:</span><strong>${targetData.challanNo}</strong></div>
                                     <div><span class="meta-label">Date & Time</span><span class="meta-colon">:</span>${targetData.receivingDate}</div>
                                 </div>
                             </div>
@@ -2352,7 +2352,7 @@
                     <div>
                         ${bottomSectionHtml}
                         <div class="challan-contact-footer">
-                            <span><i class="fa-solid fa-phone"></i> Ph : + 91-(11)-46528894-97</span>
+                            <span><i class="fa-solid fa-phone"></i> Ph : + 91-(11)-46528891-92</span>
                             <span><i class="fa-solid fa-globe"></i> www.sanchartelesystems.com</span>
                         </div>
                         <div class="challan-thankyou-bar">Thank You</div>
@@ -2367,7 +2367,7 @@
                 return;
             }
 
-            const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STELE/DC/'));
+            const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('DC/POC/'));
             const items = targetData.items || [];
             
             const totalPages = Math.max(1, Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE));
@@ -2417,7 +2417,7 @@
         window.downloadSingleChallanPDF = function() {
             const element = document.getElementById('challanPrintContainer');
             const challanNoRaw = document.querySelector('.challan-meta-right div:first-child').innerText;
-            const cleanChallanName = challanNoRaw.replace('Challan No.:', '').trim().replace(/\//g, '_');
+            const cleanChallanName = challanNoRaw.replace('MRN No.:', '').trim().replace(/\//g, '_');
             
             const opt = {
                 margin: 0,

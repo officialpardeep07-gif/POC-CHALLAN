@@ -1538,9 +1538,9 @@
             const yyyy = dateObj.getFullYear();
             const formattedDateString = `${dd} - ${mm} - ${yyyy}`;
 
-            let receiptCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STL/RC/')).length;
+            let receiptCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STELE/RC/')).length;
             const formattedSerialNo = String(receiptCount + 1).padStart(3, '0');
-            const dynamicChallanNumber = `STL/RC/26-27/${formattedSerialNo}`;
+            const dynamicChallanNumber = `STELE/RC/26-27/${formattedSerialNo}`;
 
             const itemRows = document.querySelectorAll('#itemTableBody tr');
             let itemsArray = [];
@@ -1616,9 +1616,9 @@
             const yyyy = dateObj.getFullYear();
             const formattedDateString = `${dd} - ${mm} - ${yyyy}`;
 
-            let outwardCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STL/DC/')).length;
+            let outwardCount = Object.values(fetchedChallans).filter(c => c.challanNo && c.challanNo.includes('STELE/DC/')).length;
             const formattedSerialNo = String(outwardCount + 1).padStart(3, '0');
-            const dynamicChallanNumber = `STL/DC/26-27/${formattedSerialNo}`;
+            const dynamicChallanNumber = `STELE/DC/26-27/${formattedSerialNo}`;
 
             const itemRows = document.querySelectorAll('#outwardItemTableBody tr');
             let itemsArray = [];
@@ -1767,9 +1767,9 @@
 
                 let typeMatch = true;
                 if(currentFilterMode === 'receipt') {
-                    typeMatch = (item.type === 'receipt' || (!item.type && item.challanNo.includes('STL/RC/')));
+                    typeMatch = (item.type === 'receipt' || (!item.type && item.challanNo.includes('STELE/RC/')));
                 } else if(currentFilterMode === 'delivery') {
-                    typeMatch = (item.type === 'delivery' || item.challanNo.includes('STL/DC/'));
+                    typeMatch = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/'));
                 }
                 
                 if (!typeMatch) return false;
@@ -1817,7 +1817,7 @@
 
             keys.forEach(key => {
                 const item = fetchedChallans[key];
-                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STL/DC/')) ? 
+                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ? 
                     `<span class="badge bg-info text-dark">Outward</span>` : `<span class="badge bg-primary">Receipt</span>`;
                 
                 const tr = document.createElement('tr');
@@ -1893,7 +1893,7 @@
 
             keys.forEach(key => {
                 const item = fetchedChallans[key];
-                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STL/DC/')) ?
+                const typeBadge = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ?
                     `<span class="badge bg-info text-dark">Delivery</span>` : `<span class="badge bg-primary">Receipt</span>`;
 
                 const tr = document.createElement('tr');
@@ -2081,7 +2081,7 @@
             Object.keys(data).forEach(key => {
                 const item = data[key];
                 totalRecordsCount++;
-                const currentChallanType = (item.type === 'delivery' || item.challanNo.includes('STL/DC/')) ? 'delivery' : 'receipt';
+                const currentChallanType = (item.type === 'delivery' || item.challanNo.includes('STELE/DC/')) ? 'delivery' : 'receipt';
                 let currentItemQty = 0;
                 
                 if(item.customerName && item.customerName.trim() !== '') {
@@ -2351,7 +2351,7 @@
             const targetData = fetchedChallans[key];
             if (!targetData) return;
 
-            const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STL/DC/'));
+            const isDelivery = (targetData.type === 'delivery' || targetData.challanNo.includes('STELE/DC/'));
             const items = targetData.items || [];
             const totalPages = Math.max(1, Math.ceil(items.length / MAX_ITEMS_PER_CHALLAN_PAGE));
 

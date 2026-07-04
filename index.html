@@ -2148,7 +2148,7 @@
             if (!isDelivery) {
                 dispatchBarHtml = `
                         <div class="challan-dispatch-type-bar">
-                            REMARKS / DESCRIPTION META : ${targetData.remarks || 'NA'}
+                            ${targetData.remarks || 'NA'}
                         </div>`;
             }
 
@@ -2255,7 +2255,7 @@
 
                         <div class="challan-top-header">
                             <h2>Sanchar Telesystems Limited</h2>
-                            <p><i class="fa-solid fa-location-dot"></i> 501, 5th Floor, Skylark Building 60, Nehru Place, New Delhi - 110019</p>
+                            <p><i class="fa-solid fa-location-dot"></i> Pocket A, 78, A Block Rd, Block A, Okhla Phase II, Okhla Industrial Estate, New Delhi, Delhi 110020</p>
                             <div class="gst-line small fw-bold mt-2">
                                 <span><i class="fa-solid fa-fingerprint"></i> GSTIN: 07AAMCS4654H1ZA</span>
                                 <span class="sep">|</span>
@@ -2277,7 +2277,6 @@
                                 <div class="meta-box-body">
                                     <div><span class="meta-label">Challan No.</span><span class="meta-colon">:</span><strong>${targetData.challanNo}</strong></div>
                                     <div><span class="meta-label">Date & Time</span><span class="meta-colon">:</span>${targetData.receivingDate}</div>
-                                    <div><span class="meta-label">Customer Type</span><span class="meta-colon">:</span>${targetData.customerType || 'Private'}</div>
                                 </div>
                             </div>
                         </div>
@@ -2299,10 +2298,10 @@
                     <div>
                         ${bottomSectionHtml}
                         <div class="challan-contact-footer">
-                            <span><i class="fa-solid fa-phone"></i> +91-11-41617630</span>
+                            <span><i class="fa-solid fa-phone"></i> Ph : + 91-(11)-46528894-97</span>
                             <span><i class="fa-solid fa-globe"></i> www.sanchartelesystems.com</span>
                         </div>
-                        <div class="challan-thankyou-bar">Only Thank You</div>
+                        <div class="challan-thankyou-bar">Thank You</div>
                     </div>
                 </div>`;
         }
@@ -2362,18 +2361,18 @@
                 margin: 0,
                 filename: `${filenameString}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
+                html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().from(element).set(opt).save();
         }
 
         window.downloadTablePDF = function() {
             const element = document.getElementById('logsTableContainer');
             const opt = {
-                margin: 5,
-                filename: 'Cloud_Ledger_Logs.pdf',
-                image: { type: 'jpeg', quality: 0.95 },
+                margin: 10,
+                filename: 'Sanchar_Challan_Logs.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };

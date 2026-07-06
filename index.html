@@ -360,6 +360,10 @@
         .dispatch-checkbox-group { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
         .dispatch-checkbox-group label { display: flex; align-items: center; gap: 5px; font-weight: 700; white-space: nowrap; }
         .dispatch-checkbox-group input[type="checkbox"] { width: 12px; height: 12px; accent-color: var(--challan-navy); margin: 0; }
+        .chk-box { display: inline-flex; align-items: center; justify-content: center; width: 13px; height: 13px; border: 1.5px solid #000; margin: 0; flex: 0 0 auto; }
+        .chk-box.checked::after { content: '\2714'; font-size: 11px; line-height: 1; font-weight: 900; color: #000 !important; }
+
+        .transit-box .dispatch-box-body { padding: 8px 14px; }
 
         .challan-signatory-box {
             border: 1.5px solid var(--challan-navy);
@@ -772,6 +776,16 @@
                                         <label for="formLrDocketNo">LR/Docket No.</label>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <select class="form-select" id="formFreightType">
+                                            <option value="" selected>Not Specified</option>
+                                            <option value="Paid">Paid</option>
+                                            <option value="To Pay">To Pay</option>
+                                        </select>
+                                        <label for="formFreightType">Freight</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -824,11 +838,34 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <select class="form-select" id="outwardFormModeOfDispatch" required>
+                                    <select class="form-select" id="outwardFormModeOfDispatch" required onchange="toggleOutwardDispatchOther()">
                                         <option value="By Hand" selected>By Hand</option>
                                         <option value="By Courier">By Courier</option>
+                                        <option value="Other">Other (Please Specify)</option>
                                     </select>
                                     <label for="outwardFormModeOfDispatch">Mode Of Dispatch *</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="outwardFormModeOfDispatchOtherWrap" style="display:none;">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="outwardFormModeOfDispatchOther" placeholder="Please specify mode of dispatch">
+                                    <label for="outwardFormModeOfDispatchOther">Specify Mode Of Dispatch *</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="outwardFormTransitAmount" placeholder="Transit Amount" min="0" step="0.01">
+                                    <label for="outwardFormTransitAmount">Transit Amount (₹)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="outwardFormFreightType">
+                                        <option value="" selected>Not Specified</option>
+                                        <option value="Paid">Paid</option>
+                                        <option value="To Pay">To Pay</option>
+                                    </select>
+                                    <label for="outwardFormFreightType">Freight</label>
                                 </div>
                             </div>
                         </div>
@@ -1178,6 +1215,18 @@
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Declaration Clause</label>
                             <input type="text" class="form-control" id="draftEditDeclaration">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Transit Amount (₹)</label>
+                            <input type="number" class="form-control" id="draftEditTransitAmount" min="0" step="0.01">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Freight</label>
+                            <select class="form-select" id="draftEditFreightType">
+                                <option value="">Not Specified</option>
+                                <option value="Paid">Paid</option>
+                                <option value="To Pay">To Pay</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -1597,6 +1646,7 @@
                 receivedBy: document.getElementById('formReceivedBy').value || 'Inward Receipt',
                 courierName: document.getElementById('formCourierName').value || 'NA',
                 lrDocketNo: document.getElementById('formLrDocketNo').value || 'NA',
+                freightType: document.getElementById('formFreightType').value || '',
                 timestamp: new Date().toISOString(),
                 status: 'draft'
             };
@@ -1630,6 +1680,20 @@
                     procBtn.disabled = false;
                     switchTab('draft');
                 });
+        }
+
+        window.toggleOutwardDispatchOther = function() {
+            const val = document.getElementById('outwardFormModeOfDispatch').value;
+            const wrap = document.getElementById('outwardFormModeOfDispatchOtherWrap');
+            const otherInput = document.getElementById('outwardFormModeOfDispatchOther');
+            if (val === 'Other') {
+                wrap.style.display = 'block';
+                otherInput.required = true;
+            } else {
+                wrap.style.display = 'none';
+                otherInput.required = false;
+                otherInput.value = '';
+            }
         }
 
         window.submitOutwardForm = function(event) {
@@ -1668,7 +1732,12 @@
                 });
             });
             const matType = document.getElementById('outwardFormMaterialType').value;
-            const dispMode = document.getElementById('outwardFormModeOfDispatch').value;
+            let dispMode = document.getElementById('outwardFormModeOfDispatch').value;
+            if (dispMode === 'Other') {
+                const customDispMode = document.getElementById('outwardFormModeOfDispatchOther').value.trim();
+                dispMode = customDispMode || 'Other';
+            }
+            const transitAmountVal = document.getElementById('outwardFormTransitAmount').value;
 
             const outwardDataPayload = {
                 type: 'delivery',
@@ -1679,6 +1748,8 @@
                 customerType: "Private",
                 address: document.getElementById('outwardFormAddress').value,
                 remarks: `${matType} | ${dispMode}`,
+                transitAmount: transitAmountVal ? parseFloat(transitAmountVal).toFixed(2) : '',
+                freightType: document.getElementById('outwardFormFreightType').value || '',
                 declaration: document.getElementById('outwardFormDeclaration').value || 'NA',
                 items: itemsArray,
                 totalUnitsCount: calculatedTotalQty,
@@ -1703,6 +1774,9 @@
                         </tr>
                     `;
                     document.getElementById('outwardFormDate').valueAsDate = new Date();
+                    document.getElementById('outwardFormModeOfDispatchOtherWrap').style.display = 'none';
+                    document.getElementById('outwardFormModeOfDispatchOther').value = '';
+                    document.getElementById('outwardFormTransitAmount').value = '';
                     procBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-2"></i>Save & Generate Outward Challan`;
                     procBtn.disabled = false;
                     switchTab('draft');
@@ -1989,6 +2063,8 @@
             document.getElementById('draftEditGstNo').value = record.gstNumber || '';
             document.getElementById('draftEditRemarks').value = record.remarks || '';
             document.getElementById('draftEditDeclaration').value = record.declaration || '';
+            document.getElementById('draftEditTransitAmount').value = record.transitAmount || '';
+            document.getElementById('draftEditFreightType').value = record.freightType || '';
 
             const itemsBody = document.getElementById('draftEditItemTableBody');
             itemsBody.innerHTML = "";
@@ -2039,12 +2115,16 @@
                 });
             });
 
+            const transitAmountVal = document.getElementById('draftEditTransitAmount').value;
+
             return {
                 receivingDate: formattedDateString,
                 customerName: document.getElementById('draftEditCustName').value,
                 address: document.getElementById('draftEditAddress').value,
                 gstNumber: document.getElementById('draftEditGstNo').value,
                 remarks: document.getElementById('draftEditRemarks').value,
+                transitAmount: transitAmountVal ? parseFloat(transitAmountVal).toFixed(2) : '',
+                freightType: document.getElementById('draftEditFreightType').value || '',
                 declaration: document.getElementById('draftEditDeclaration').value,
                 items: itemsArray,
                 totalUnitsCount: calculatedTotalQty
@@ -2240,8 +2320,22 @@
                         materialTypeStr = metadata.trim();
                     }
 
+                    const transitAmountVal = targetData.transitAmount;
+                    const transitAmountStr = (transitAmountVal !== undefined && transitAmountVal !== null && transitAmountVal !== '') ? `Rs. ${parseFloat(transitAmountVal).toFixed(2)}` : '';
+
                     bottomSectionHtml = `
                         <div>
+                            <div class="challan-dispatch-box transit-box">
+                                <div class="challan-box-title"><i class="fa-solid fa-money-bill-transfer"></i>Transit</div>
+                                <div class="dispatch-box-body">
+                                    <div class="dispatch-row">
+                                        <div class="dispatch-field full-width">
+                                            <span class="dispatch-label">TRANSIT AMOUNT&nbsp;:</span>
+                                            <span class="field-line-long">${transitAmountStr}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="challan-dispatch-box">
                                 <div class="challan-box-title"><i class="fa-solid fa-truck-fast"></i>Dispatch Details</div>
                                 <div class="dispatch-box-body">
@@ -2258,7 +2352,7 @@
                                     <div class="dispatch-row">
                                         <div class="dispatch-field">
                                             <span class="dispatch-label">FREIGHT&nbsp;:</span>
-                                            <span class="field-line-long"></span>
+                                            <span class="field-line-long">${targetData.freightType || ''}</span>
                                         </div>
                                         <div class="dispatch-field">
                                             <span class="dispatch-label">VEHICLE NO.&nbsp;:</span>
@@ -2269,8 +2363,8 @@
                                         <div class="dispatch-field full-width">
                                             <span class="dispatch-label">MATERIAL TYPE DISPATCH&nbsp;:</span>
                                             <div class="dispatch-checkbox-group ms-2">
-                                                <label><input type="checkbox" ${materialTypeStr === 'Material Sent For Repair' ? 'checked' : ''} disabled> SENT FOR REPAIR</label>
-                                                <label><input type="checkbox" ${materialTypeStr === 'Material Returned After Repair' ? 'checked' : ''} disabled> RETURNED AFTER REPAIR</label>
+                                                <label><span class="chk-box ${materialTypeStr === 'Material Sent For Repair' ? 'checked' : ''}"></span> SENT FOR REPAIR</label>
+                                                <label><span class="chk-box ${materialTypeStr === 'Material Returned After Repair' ? 'checked' : ''}"></span> RETURNED AFTER REPAIR</label>
                                             </div>
                                         </div>
                                     </div>
@@ -2311,6 +2405,7 @@
                                 <div class="challan-box-body">
                                     <div>Courier Name<span class="meta-colon">:</span> <span class="field-line" style="min-width:110px;">${(targetData.courierName && targetData.courierName !== 'NA') ? targetData.courierName : ''}</span></div>
                                     <div class="mt-1">LR/Docket No.<span class="meta-colon">:</span> <span class="field-line" style="min-width:110px;">${(targetData.lrDocketNo && targetData.lrDocketNo !== 'NA') ? targetData.lrDocketNo : ''}</span></div>
+                                    <div class="mt-1">Freight<span class="meta-colon">:</span> <span class="field-line" style="min-width:110px;">${targetData.freightType || ''}</span></div>
                                 </div>
                             </div>
                             <div class="challan-signatory-box" style="flex: 1; margin:0;">
